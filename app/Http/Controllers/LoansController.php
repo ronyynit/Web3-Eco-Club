@@ -57,8 +57,6 @@ class LoansController extends Controller
   
     }
 
-    
-
     /**
      * Store a newly created resource in storage.
      *
@@ -67,7 +65,7 @@ class LoansController extends Controller
      */
     public function store(Request $request)
     {
-            
+        if ($request->ajax()) {   
         $this->validate($request, [
 
             'firstName' => 'required',
@@ -90,6 +88,7 @@ class LoansController extends Controller
         fclose($file);
 
     }
+  }
 
     /**
      * Display the specified resource.
@@ -99,7 +98,8 @@ class LoansController extends Controller
      */
     public function show(Request $request)
     {
-        
+      
+      if ($request->ajax()) {
       $fLoanAmount = $request->loanAmmount; 
       $fAPR = 9;
       $iTerm = $request->loanRepaymentPeriod;
@@ -110,8 +110,8 @@ class LoansController extends Controller
     
    
     
-    $paymentPlan = [];
-    $output="";
+       $paymentPlan = [];
+       $output="";
     
     for ($n = 0; $n < $iTerm; $n++) {
 
@@ -154,17 +154,16 @@ class LoansController extends Controller
                              <td style="text-align: right;">'.$monthlyLine->monthlyInterest.'</td>
                              <td style="text-align: right;">'.$monthlyLine->monthlyBalanceRepayment.'</td>
                              <td style="text-align: right;">'.$monthlyLine->payment.'</td>
-                             <td style="text-align: right;">'.$monthlyLine->outstandingLoan.'</td'.'</tr>';
-                             
-                             
+                             <td style="text-align: right;">'.$monthlyLine->outstandingLoan.'</td'.
 
-                
-
+                        '</tr>';
           }
 
 
 
-        return Response($output);  
+        return Response($output); 
+
+      } 
         
 
     }
